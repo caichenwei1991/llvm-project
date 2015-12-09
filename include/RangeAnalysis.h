@@ -15,10 +15,13 @@ public:
 
     LatticeNode *runFlowFunc(LatticeNode *in, CFGNode *curNode){
         errs()<<"RangeAnalysis:: runFlowFunc\n";
+
         RangeAnalysisLatticeNode *newIn = static_cast<RangeAnalysisLatticeNode *>(in);
         Instruction *curInst = curNode->inst;
         string opName = curInst->getOpcodeName();
         RangeAnalysisLatticeNode *rlt;
+
+        errs()<<"RangeAnalysis:: runFlowFunc in->val size"<<newIn->val.size()<<"\n";
 
 
         //errs()<<"RangeAnalysis:: good!\n";

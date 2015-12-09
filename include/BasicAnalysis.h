@@ -28,8 +28,7 @@ public:
   }
   void createCFG(Function &F){
     //adopt BFS to build the CFG
-    errs()<<"1234";
-    errs()<<"BasicAnalysis::createCFG Let's create the CFG for func:"<<"\n";
+    errs()<<"\n==>BasicAnalysis::createCFG Let's create the CFG for func: "<<F.getName()<<"\n";
     
     int idx = 0;
     map<Instruction *, CFGNode *> inst_node;
@@ -82,6 +81,11 @@ public:
     for(;it!=inst_node.end(); it++){
       this->CFGNodes.push_back(it->second);
     }
+
+    errs()<<"Number of CFGNodes : "<<CFGNodes.size()<<"\n";
+    errs()<<"Number of CFGEdges : "<<CFGEdges.size()<<"\n";
+    errs()<<"<==BasicAnalysis::createCFG CFG created for func: "<<F.getName()<<"\n\n";
+   
     //errs()<<"Size of all nodes:"<<CFGNodes.size()<<"\n";
 
 
@@ -98,18 +102,18 @@ public:
     
   }
   void runWorkList(){
+    errs()<<"\n==>BasicAnalysis::runWorkList: Let's run worklist\n";
     queue<CFGNode *>workList;
     for(size_t i=0; i < CFGEdges.size(); i++){
         CFGEdges[i]->latticeNode = latticeNodeInit();
     }
     for(size_t i=0; i < CFGNodes.size(); i++){
         workList.push(CFGNodes[i]);
-        errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
     }
     //errs()<<"runWorkList::good!";
     //errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
     //run the worklist algorithm
-    int  aa = 0;
+    //int  aa = 0;
     while(!workList.empty()){
         //errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
         CFGNode *curNode = workList.front();
@@ -138,7 +142,8 @@ public:
         }
         delete out;
     }
-    errs()<<"\nSize of nodes:"<<this->CFGNodes.size()<<"\n";
+    //errs()<<"\nSize of nodes:"<<this->CFGNodes.size()<<"\n";
+    errs()<<"<==BasicAnalysis::runWorkList: Worklist completed.\n\n";
 };
   virtual LatticeNode *runFlowFunc(LatticeNode *in, CFGNode *curNode){}
   virtual LatticeNode *latticeNodeInit(){

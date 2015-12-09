@@ -23,16 +23,16 @@ namespace {
     RangeAnalysisPass() : FunctionPass(ID) {}
     
     bool runOnFunction(Function &F){
-        rangeAnalysisVec.push_back(new RangeAnalysis(F));
-        //RangeAnalysis * BA = new RangeAnalysis(F);
+        RangeAnalysis *RA = new RangeAnalysis(F);
+        RA->runWorkList();
         return true;
     }
 
     void print(llvm::raw_ostream &O, const Module *M) const{
-        size_t i =0;
-        for(; i<rangeAnalysisVec.size(); i++){
-            rangeAnalysisVec[i]->runWorkList();
-        }
+        // size_t i =0;
+        // for(; i<rangeAnalysisVec.size(); i++){
+        //     rangeAnalysisVec[i]->runWorkList();
+        // }
     }
   };
 }
