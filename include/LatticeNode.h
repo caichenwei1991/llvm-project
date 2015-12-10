@@ -2,6 +2,8 @@
 #define LATTICE_NODE
 
 #include <string>
+#define TOP "top"
+#define BOTTOM "bottom"
 
 using namespace std;
 //using namespace llvm;
@@ -10,8 +12,8 @@ class LatticeNode{
 private:
   
 public:
-    static string TOP;
-    static string BOTTOM;
+    //static string TOP;
+    //static string BOTTOM;
     string basic;   //to mark the node is top or bottom
 
     LatticeNode(){
@@ -31,8 +33,8 @@ public:
     virtual ~LatticeNode(){};
 };
 
-string LatticeNode::TOP = "top";
-string LatticeNode::BOTTOM = "bottom";
+//string LatticeNode::TOP = "top";
+//string LatticeNode::BOTTOM = "bottom";
 #endif
 
 
