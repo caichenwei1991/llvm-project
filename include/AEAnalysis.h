@@ -47,7 +47,7 @@ public:
     LatticeNode *latticeNodeInit(){
         /* * ae = new AELatticeNode();
         ae->val = new map<string, string>;*/
-        return new AEAnalysisLatticeNode(AEAnalysisLatticeNode::BOTTOM);
+        return new AEAnalysisLatticeNode(BOTTOM);
     }
 
     

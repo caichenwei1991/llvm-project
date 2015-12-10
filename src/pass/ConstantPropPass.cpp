@@ -23,17 +23,20 @@ namespace {
 		//virtual bool runOnModule(Module &M) {
 			//for (Module::iterator func = M.begin(); func != M.end(); func++) {
 			cpa.push_back(new ConstantPropAnalysis(F));
-			for (unsigned int i = 0; i < cpa.size(); i++)
-				cpa[i]->runWorkList();
-				errs() << cpa.size() << "\n";
-			for (unsigned int i = 0; i < cpa.size(); i++)
-				for (unsigned int j = 0; j < cpa[i]->CFGEdges.size(); j++) {
-					ConstantPropAnalysisLatticeNode *tmp = static_cast<ConstantPropAnalysisLatticeNode*>(cpa[i]->CFGEdges[j]->latticeNode);
-					for (map<string, float>::iterator it = tmp->value.begin(); it != tmp->value.end(); it++) {
+			//for (unsigned int i = 0; i < cpa.size(); i++)
+			cpa[cpa.size()-1]->runWorkList();
+				//errs() << cpa.size() << "\n";
+			//for (unsigned int i = 0; i < cpa.size(); i++) {
+			errs() << "Run on Function "<< F.getName() << "\n";
+				for (unsigned int j = 0; j < cpa[cpa.size()-1]->CFGEdges.size(); j++) {
+					ConstantPropAnalysisLatticeNode *tmp = static_cast<ConstantPropAnalysisLatticeNode*>(cpa[cpa.size()-1]->CFGEdges[j]->latticeNode);
+					errs() << "Output of Node #" << j << "\n";
+					for (map<string, double>::iterator it = tmp->value.begin(); it != tmp->value.end(); it++) {
 						errs() << it->first << " = " << it->second << "\n";
 					}
 					errs() << "\n";
 				}
+			//}
 			errs() << "Done!" << "\n";
 		//}
 			return false;

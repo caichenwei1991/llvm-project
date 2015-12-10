@@ -32,7 +32,7 @@ public:
 		if (this->value.size() != other->value.size()) return false;
 
 	    	// for the same key name, compare their values
-		for (map<string, float>::iterator it = this->value.begin(); it != this->value.end(); it++) {
+		for (map<string, double>::iterator it = this->value.begin(); it != this->value.end(); it++) {
 			string key = it->first;
         		float thisval = it->second;
  	       		// cannot find this key
@@ -60,14 +60,14 @@ public:
 			return f;
     		}
 
-		for (map<string, float>::iterator it = this->value.begin(); it != this->value.end(); it++) {
+		for (map<string, double>::iterator it = this->value.begin(); it != this->value.end(); it++) {
 			if (other->value.find(it->first) == other->value.end()) {
 	         	f->value[it->first] = this->value.find(it->first)->second;
 		} else if (it->second == other->value.find(it->first)->second) 
 	    		f->value[it->first] = this->value.find(it->first)->second;
     		}
 
-	        for (map<string, float>::iterator it = other->value.begin(); it != other->value.end(); it++) {
+	        for (map<string, double>::iterator it = other->value.begin(); it != other->value.end(); it++) {
 			if (this->value.find(it->first) == this->value.end()) {
 	    		f->value[it->first] = other->value.find(it->first)->second;
 		} else if (it->second == this->value.find(it->first)->second) 
@@ -77,6 +77,6 @@ public:
 	        return f;
 	}
 
-	map<string, float> value;
+	map<string, double> value;
 };
 #endif 

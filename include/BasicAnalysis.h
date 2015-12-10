@@ -99,7 +99,7 @@ public:
     
   }
   void runWorkList(){
-    errs()<<"Running BasicAnalysis::runWorkList..."<<"\n";
+    //errs()<<"Running BasicAnalysis::runWorkList..."<<"\n";
     queue<CFGNode *>workList;
     for(size_t i=0; i < CFGEdges.size(); i++){
         CFGEdges[i]->latticeNode = latticeNodeInit();
