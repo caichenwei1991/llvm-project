@@ -7,15 +7,12 @@
 #include <string>
 #include <sstream>
 
-using namespace llvm;
-using namespace std;
 
 class AEAnalysis: public BasicAnalysis{
 
 public:
 
     AEAnalysis(Function &F):BasicAnalysis(F){
-        errs()<<">>>>>>>>>> AEAnalysis start <<<<<<<<<<\n";
         createCFG(F);
     };
 
@@ -31,12 +28,10 @@ public:
         
         if(opName == "add" || opName == "sub" || opName == "mul") {
             returnIn = analyzeAOpB(inputIn, currentInst);
-            errs()<<">>>>>>>>>> AEAnalysis:: runFlowFunc start1111 <<<<<<<<<<\n";
             return returnIn;
         } else if (opName == "other") {
             //what should do here?
         } else { //there's no Operator? >>  F x:= y (in) ==
-            errs()<<">>>>>>>>>> AEAnalysis:: runFlowFunc start2222 <<<<<<<<<<\n";
             return in;
         } 
 
@@ -74,7 +69,7 @@ private:
         string rightOperandStr = string(rightOperandValue->getName());
         string currentInstName = currentInst->getName(); //get inst name e.g. %add
 
-        errs()<< "opName ====>> : " << opName << " instName ====>> : %" << currentInstName <<'\n';
+        errs()<< "OperatorName >> : " << opName << "\nInstructionName >> : %" << currentInstName <<'\n';
         //currentInstName = "%" + currentInstName;
         //errs() << "This instruction is: " << opName << " This node is: " << currentInstName << " = " << leftOperandStr << " " << opName << " " << rightOperandStr << "\n";
 
@@ -96,16 +91,16 @@ private:
 
                     newIn->val[currentInstName] = str;
 
-                    errs() << "both constants  :" << currentInstName << " = " << newIn->val[currentInstName] << '\n';
+                    errs() << "Type >> : Both operands are constant >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
 
                     for (map<string, string>::iterator it = newIn->val.begin(); it != newIn->val.end(); it++) {
 
-                         errs() << "it->second: " << it->second << " str: " << str << '\n';
+                         //errs() << "it->second: " << it->second << " str: " << str << '\n';
                         if (it->second == str && it->first != currentInstName){
                             newIn->val[currentInstName] = it->first;
                             //newIn->val.erase(it);
-                            errs() << "erase happen here \n" ;
-                            errs() << "now current map = " << it->first << "," << it->second << '\n';
+                            //errs() << "erase happen here \n" ;
+                            //errs() << "now current map = " << it->first << "," << it->second << '\n';
                         }
                     }
 
@@ -113,7 +108,7 @@ private:
 
                     if (currentInstName != leftOperandStr && rightOperandStr != "") {
                         newIn->val[currentInstName] = opName + "," + leftValStr + "," + rightOperandStr;
-                        errs() << " left side is constant +  right side one is var  :" << currentInstName << " = " << newIn->val[currentInstName] << '\n';
+                        errs() << "Type >> : Left operand - Constant & Right operand - varible >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
                     }
 
             }
@@ -126,7 +121,7 @@ private:
 
                     if (currentInstName != leftOperandStr && leftOperandStr != "" ) {
                         newIn->val[currentInstName] = opName + ","  + leftOperandStr + "," + rightValStr;
-                        errs() << " right side is constant +  left side one is var  :" << currentInstName << " = " << newIn->val[currentInstName] << '\n';
+                        errs() << "Type >> : Left operand - varible & Right operand - operand >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
                     }
 
 
@@ -136,7 +131,7 @@ private:
                     for (map<string, string>::iterator it = newIn->val.begin(); it != newIn->val.end(); it++) {
                         if (currentInstName == it->first) {
                             newIn->val[currentInstName] = opName + "," + leftOperandStr + "," + rightOperandStr ;
-                            errs() << " both sides are varibles +=======+  :" << currentInstName << " = " << newIn->val[currentInstName] << '\n';
+                            errs() << "Type >> : Both operands are varible >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
                         } else {
 
                         }
@@ -146,7 +141,7 @@ private:
                     
                 
         }
-        errs() << " FINISH  +=======+ newIn size " << newIn->val.size() << '\n';
+        errs() << "Finishing analyzeAOpB >> newIn node size >> : " << newIn->val.size() << '\n';
         return newIn;
     }
 

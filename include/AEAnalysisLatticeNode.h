@@ -21,7 +21,6 @@
 #include <string>
 #include "llvm/Support/raw_ostream.h"
 
-using namespace llvm;
 
 
 class AEAnalysisLatticeNode: public LatticeNode {
@@ -61,33 +60,29 @@ public:
 
     LatticeNode * joinWith(LatticeNode *other) {
         AEAnalysisLatticeNode * otherNode = static_cast<AEAnalysisLatticeNode*>(other);
-        errs()<< ">>>>>>>>>> LatticeNode * joinWith start <<<<<<<<<<\n";
+        //errs()<< ">>>>>>>>>> LatticeNode * joinWith start <<<<<<<<<<\n";
         //errs()<< "otherNode size () = " << otherNode->val.size() << '\n';
         //errs()<< "otherNode size () = " << otherNode->basic << '\n';
 
         if (this->basic == TOP || otherNode->basic == TOP) { 
-            "I just entered 4... \n";
             return new AEAnalysisLatticeNode(TOP); 
         }
 
         if (this->basic == BOTTOM && otherNode->basic == BOTTOM) { 
-            errs()<< "I just entered 1... \n"; 
             return new AEAnalysisLatticeNode(BOTTOM); 
         }
         
         AEAnalysisLatticeNode *newNode = new AEAnalysisLatticeNode();
         if (this->basic == BOTTOM) { 
-            "I just entered 2... \n"; 
             return new AEAnalysisLatticeNode(otherNode); 
         }
         if (otherNode->basic == BOTTOM) { 
-            "I just entered 3... \n";
             return new AEAnalysisLatticeNode(this);
         }
         //common situation
         
         newNode->val = this->val;
-        errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
+        //errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
 
 
     for (map<string, string>::iterator it = this->val.begin(); it != this->val.end(); it++) {
@@ -119,6 +114,7 @@ public:
                 newNode->val[it->first] = otherNodeVal;
         }
     }
+
         errs()<< "Check newNode :>>" << newNode->val.size() << " \n";
         return newNode;
     }
@@ -136,32 +132,7 @@ public:
     ~AEAnalysisLatticeNode(){}
 
 
-    //fns
-    //void printErr();
-
-    //bool isTopOrBottom();
-
 };
 
 #endif 
 
-
-        // for(map<string, string>::iterator it = newNode->val.begin(); it != newNode->val.end(); it++) {
-        //     if(otherNode->val.find(it->first) == otherNode->val.end()) { 
-        //         //no same key found, merge(intersect) both nodes to empty!
-        //         //newNode->val[it->first] = it->second;
-        //         newNode->val.erase(it);
-        //     }else if(otherNode->val.find(it->first)->second == it->second) { //same key same val found
-        //         //newNode->val[it->first] = it->second;
-        //         errs() << " excuted line 54, AEAnalysisLatticeNode.cpp" <<'\n';
-        //     }else { //same key found, check contents
-        //         newNode->val.erase(it);
-        //     }
-        //     /*
-        //     if(otherNode->val.find(it->first)->second != it->second){ //if key is matching but contents
-        //             newNode->val.erase(it);
-        //             //return false; 
-        //     }
-        //     */
-        //     //if(otherNode->val.find(it->second)->second != it->second) { return false; }
-        // }
