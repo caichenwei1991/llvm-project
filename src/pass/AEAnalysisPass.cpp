@@ -23,14 +23,21 @@ namespace {
     AEAnalysisPass() : FunctionPass(ID) {}
     
     bool runOnFunction(Function &F){
+        errs() << "\n";
+        errs() << "AEAnalysisPass::runOnFunction >> running\n";
         AEAnalysisVec.push_back(new AEAnalysis(F));
+            for(unsigned int i = 0; i<AEAnalysisVec.size(); i++){
+            AEAnalysisVec[i]->runWorkList();
+        }
         //AEAnalysis * BA = new AEAnalysis(F);
+        
         return true;
     }
 
     void print(llvm::raw_ostream &O, const Module *M) const{
-        size_t i =0;
-        for(; i<AEAnalysisVec.size(); i++){
+         errs() << "AEpass::print\n";
+        //size_t i =0;
+        for(unsigned int i = 0; i<AEAnalysisVec.size(); i++){
             AEAnalysisVec[i]->runWorkList();
         }
     }

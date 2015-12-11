@@ -154,34 +154,3 @@ private:
 
 
 #endif
-
-
-
-        //http://llvm.org/docs/doxygen/html/namespacellvm_1_1mdconst.html
-        /*
-        if (currentInstName != 0) {
-        //if ((ConstantInt* CILeft = dyn_cast<ConstantInt>(leftOperandValue)) && (ConstantInt* CIRight = dyn_cast<ConstantInt>(rightOperandValue))) {
-        //both left right sides of op are constants
-
-            for(map<string, string>::iterator it = newIn->val.begin(); it != newIn->val.end(); it++) {
-                //string inNodeRightOp = it->second;
-
-            } 
-        } else {// if { //both sides are all variables
-            //first  in - {x->*}
-            for(map<string, string>::iterator it = newIn->val.begin(); it != newIn->val.end(); it++) {
-                //string inNodeRightOp = it->second;
-                if( currentInstName == it->first ) { // x->* found in the latticeNode, remove it!
-                    newIn->val.erase(it);
-
-                }else if( rightOperandStr == it->second || leftOperandStr == it->second ) { //same key different value found //delete everything x assign to.
-                    newIn->val.erase(it);
-
-                }else { // ok to merge
-                    newIn->val[currentInstName] = "";
-                }
-            } 
-            //second in - {*->x}
-
-        }
-        */
