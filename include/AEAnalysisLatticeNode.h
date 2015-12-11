@@ -82,8 +82,7 @@ public:
         //common situation
         
         newNode->val = this->val;
-        //errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
-
+        errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
 
     for (map<string, string>::iterator it = this->val.begin(); it != this->val.end(); it++) {
 
@@ -97,7 +96,7 @@ public:
 
             if (otherNodeVal == thisVal)
 
-                newNode->val[it->first] = otherNodeVal;
+            newNode->val[it->first] = otherNodeVal;
 
         }
     }

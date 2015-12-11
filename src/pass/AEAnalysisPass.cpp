@@ -7,8 +7,7 @@
 #include <map>
 #include <iomanip>
 #include <iostream>
-#include <string>
-#include <vector>
+
 #include "llvm/IR/IRBuilder.h"
 
 #include "../../include/AEAnalysis.h"
@@ -19,31 +18,30 @@ namespace {
         vector<AEAnalysis *> AEAnalysisVec;
         AEAnalysisPass() : FunctionPass(ID) {}
 
-        virtual bool runOnFunction(Function &F) {
-            AEAnalysisVec.push_back(new AEAnalysis(F));
-            for (unsigned int i = 0; i < AEAnalysisVec.size(); i++)
-                AEAnalysisVec[i]->runWorkList();
-                //errs() << AEAnalysisVec.size() << "\n";
-                errs() << "Inst = op, LtO, RtO"<< "\n";
+        
+    bool runOnFunction(Function &F){
+        AEAnalysis *ae = new AEAnalysis(F);
+        ae->runWorkList();
+        //print
+        errs()<<"\n==== The analysis result of function "<<F.getName()<<" (START) ====\n";
+        for(size_t i = 0; i < ae->CFGEdges.size(); i++){
+            CFGNode *src = ae->CFGEdges[i]->srcNode;
+            CFGNode *dst = ae->CFGEdges[i]->dstNode;
+            LatticeNode *ln = ae->CFGEdges[i]->latticeNode;
+            errs()<<"\n"<<i<<". "<<"FROM INSTRUCTION "<<*src->inst<<" TO "<<*dst->inst<<"\n";
+            
+            AEAnalysisLatticeNode *paln = static_cast<AEAnalysisLatticeNode *>(ln);
+            map<string, string >::iterator it = paln->val.begin();
+            for(;it!=paln->val.end();it++){
 
-            for (unsigned int i = 0; i < AEAnalysisVec.size(); i++){
-                for (unsigned int j = 0; j < AEAnalysisVec[i]->CFGEdges.size(); j++) {
-                    AEAnalysisLatticeNode *tmp = static_cast<AEAnalysisLatticeNode*>(AEAnalysisVec[i]->CFGEdges[j]->latticeNode);
-                    errs() << "Output of Node #" << j << "\n";
-                    for (map<string, string>::iterator it = tmp->val.begin(); it != tmp->val.end(); it++) {
-                        
-                        errs() << it->first << " = " << it->second << "\n";
-                    }
-                    errs() << "\n";
-                }
+                errs() << it->first << " = " << it->second << "\n";
+                //errs()<<"\n";
             }
-            errs() << "Done!" << "\n";
-        //}
-            return false;
+        
         }
-
-
-
+        errs()<<"\n==== The analysis result of function "<<F.getName()<<" (END) ====\n\n\n";
+        return true;
+    }
 
 
     };
@@ -52,11 +50,5 @@ namespace {
 char AEAnalysisPass::ID = 0;
 static RegisterPass<AEAnalysisPass> X("aeAnalysis", "AE Analysis", false, false);
 
-    /*
-    void print(llvm::raw_ostream &O, const Module *M) const{
-         errs() << "AEpass::print\n";
-        //size_t i =0;
-        for(unsigned int i = 0; i<AEAnalysisVec.size(); i++){
-            AEAnalysisVec[i]->runWorkList();
-        }
-    }*/
+
+
