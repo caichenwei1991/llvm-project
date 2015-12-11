@@ -33,17 +33,17 @@ public:
         string opName = curInst->getOpcodeName();
         RangeAnalysisLatticeNode *rlt;
 
-        ////errs()<<"RangeAnalysis:: runFlowFunc in->val size"<<newIn->val.size()<<"\n";
+        //errs()<<"RangeAnalysis:: runFlowFunc in->val size"<<newIn->val.size()<<"\n";
 
 
-        ////errs()<<"RangeAnalysis:: good!\n";
+        //errs()<<"RangeAnalysis:: good!\n";
         if(opName == "add" || opName == "sub" || opName == "mul" || opName == "phi"){
         //if(opName == "add" || opName == "sub" || opName == "mul"){
             rlt = visitAOpB(newIn, curInst);
             //errs()<<"RangeAnalysis:: val size: "<<rlt->val.size()<<"\n";
             //for(int i = 0; rlt->val.size();i++){
             for(map<string, Range*>::iterator it = rlt->val.begin(); it!=rlt->val.end(); it++){
-                //errs()<<it->first<<" "<<it->second->toString()<<"\n";
+                errs()<<it->first<<" "<<it->second->toString()<<"\n";
             }
             //errs()<<"RangeAnalysis:: runFlowFunc op will return \n";
 
@@ -62,7 +62,7 @@ public:
     RangeAnalysisLatticeNode *checkLoop(RangeAnalysisLatticeNode *in, Instruction *inst){
         if(inst_state.count(inst)!=0){
             //this instruction has been met before
-            //errs()<<"!!RangeAnalysisLatticeNode::checkLoop Inst met before.\n";
+            //errs()<<"RangeAnalysisLatticeNode::checkLoop Inst met before.\n";
             RangeAnalysisLatticeNode *old = inst_state[inst];
             RangeAnalysisLatticeNode *out = new RangeAnalysisLatticeNode();
             out->val = in->val;
@@ -83,9 +83,9 @@ public:
             return out;
         }else{
             //first time to meet the inst
-            //errs()<<"!!RangeAnalysisLatticeNode::checkLoop Inst first time meet.\n";
+            //errs()<<"RangeAnalysisLatticeNode::checkLoop Inst first time meet.";
             inst_state[inst] = new RangeAnalysisLatticeNode(in);
-            //errs()<<"RangeAnalysisLatticeNode::checkLoop Inst first time meet.!\n";
+            //errs()<<"RangeAnalysisLatticeNode::checkLoop Inst first time meet.!";
             return in;
         }
     }
@@ -116,7 +116,7 @@ private:
         newRange = opRange(leftRange, rightRange, opName);
     
         //create new node and return it
-        ////errs()<<"RangeAnalysis::visitAOpB good!!\n";
+        //errs()<<"RangeAnalysis::visitAOpB good!!\n";
         RangeAnalysisLatticeNode *rlt = new RangeAnalysisLatticeNode();
         rlt->val = in->val;
         rlt->val[inst->getName()] = newRange;
@@ -139,10 +139,10 @@ private:
             if(in->val.count(string(operand->getName()))>0)
                 range = in->val[operand->getName()];
             else{
-                //errs()<<"RA :: Cant find the var "<<operand->getName()<<" in the map\n";
+                errs()<<"RA :: Cant find the var "<<operand->getName()<<" in the map\n";
                 //errs()<<"map size: "<<in->val.size()<<"\n";
                 // for(map_it it = in->val.begin(); it!=in->val.end();it++){
-                //     //errs()<<it->first<<" "<<it->second->toString()<<"\n";
+                //     errs()<<it->first<<" "<<it->second->toString()<<"\n";
                 // }
             }
         }

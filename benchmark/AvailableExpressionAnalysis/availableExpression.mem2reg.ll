@@ -1,13 +1,20 @@
-; ModuleID = 'testcp_m2r.bc'
+; ModuleID = 'availableExpression.mem2reg.bc'
 target datalayout = "e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-f80:32:32-n8:16:32-S128"
 target triple = "i386-pc-linux-gnu"
 
 ; Function Attrs: nounwind
 define i32 @main() #0 {
 entry:
-  %sub = sub nsw i32 100, 200
-  %add = add nsw i32 %sub, 100
-  %mul = mul nsw i32 %add, 100
+  %add = add nsw i32 1, 2
+  %add1 = add nsw i32 1, 2
+  %add2 = add nsw i32 3, 2
+  %sub = sub nsw i32 %add2, 2
+  %add3 = add nsw i32 1, 2
+  %add4 = add nsw i32 %add2, 1
+  %add5 = add nsw i32 2, %sub
+  %mul = mul nsw i32 %add4, 2
+  %add6 = add nsw i32 %add2, 1
+  %add7 = add nsw i32 %add4, 2
   ret i32 0
 }
 
