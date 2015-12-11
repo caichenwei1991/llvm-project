@@ -11,6 +11,7 @@
 #include "llvm/IR/BasicBlock.h"
 
 #include "LatticeNode.h"
+//#include "ConstantPropAnalysisLatticeNode.h"
 #include <vector>
 #include <queue>
 #include <map>
@@ -28,7 +29,8 @@ public:
   }
   void createCFG(Function &F){
     //adopt BFS to build the CFG
-    errs()<<"\n==>BasicAnalysis::createCFG Let's create the CFG for func: "<<F.getName()<<"\n";
+    //errs()<<"1234";
+    errs()<<"BasicAnalysis::createCFG Creating CFG..."<<"\n";
     
     int idx = 0;
     map<Instruction *, CFGNode *> inst_node;
@@ -81,11 +83,6 @@ public:
     for(;it!=inst_node.end(); it++){
       this->CFGNodes.push_back(it->second);
     }
-
-    errs()<<"Number of CFGNodes : "<<CFGNodes.size()<<"\n";
-    errs()<<"Number of CFGEdges : "<<CFGEdges.size()<<"\n";
-    errs()<<"<==BasicAnalysis::createCFG CFG created for func: "<<F.getName()<<"\n\n";
-   
     //errs()<<"Size of all nodes:"<<CFGNodes.size()<<"\n";
 
 
@@ -98,17 +95,18 @@ public:
     }
 
      errs()<<"head is "<<this->CFGHead->idx;*/
-
+     errs()<<"CFGcreate done!\n";
     
   }
   void runWorkList(){
-    errs()<<"\n==>BasicAnalysis::runWorkList: Let's run worklist\n";
+    //errs()<<"Running BasicAnalysis::runWorkList..."<<"\n";
     queue<CFGNode *>workList;
     for(size_t i=0; i < CFGEdges.size(); i++){
         CFGEdges[i]->latticeNode = latticeNodeInit();
     }
     for(size_t i=0; i < CFGNodes.size(); i++){
         workList.push(CFGNodes[i]);
+        //errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
     }
     //errs()<<"runWorkList::good!";
     //errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
@@ -129,11 +127,14 @@ public:
 
         //run the flow function and get the new lattice node
         LatticeNode *out = runFlowFunc(in, curNode);
-
+  //ConstantPropAnalysisLatticeNode *newout = static_cast<ConstantPropAnalysisLatticeNode*>(out);
+  //errs() << "add" << " : " << newout->value["add"] << "\n";
+  //errs() << "sub" << " : " << newout->value["sub"] << "\n";
         //check the out changed or not
         for(size_t i =0; i < curNode->outEdges.size(); i++){
             CFGEdge *e = curNode->outEdges[i];
             LatticeNode *newOut = out->joinWith(e->latticeNode);
+            e->latticeNode = newOut;
             if(!out->equalsTo(newOut)){
                 delete e->latticeNode;
                 e->latticeNode = newOut;
@@ -142,22 +143,22 @@ public:
         }
         delete out;
     }
-    //errs()<<"\nSize of nodes:"<<this->CFGNodes.size()<<"\n";
-    errs()<<"<==BasicAnalysis::runWorkList: Worklist completed.\n\n";
+    errs()<<"Size of nodes:"<<this->CFGNodes.size()<<"\n";
+    errs()<<"Worklist Done!\n";
 };
   virtual LatticeNode *runFlowFunc(LatticeNode *in, CFGNode *curNode){}
   virtual LatticeNode *latticeNodeInit(){
-    return new LatticeNode(LatticeNode::BOTTOM);
+    //return new LatticeNode(LatticeNode::BOTTOM);
+    return new LatticeNode(BOTTOM);
   }// Can write in the createCFG func or not?
   virtual ~BasicAnalysis(){}
 
 
-private:
   vector<CFGNode *> CFGNodes;
   vector<CFGEdge *> CFGEdges;
   CFGNode *CFGHead;
+private:
 
 };
 #endif
-
 

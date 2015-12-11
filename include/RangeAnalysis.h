@@ -92,7 +92,7 @@ public:
 
     LatticeNode *latticeNodeInit(){
         
-        RangeAnalysisLatticeNode *rlt = new RangeAnalysisLatticeNode(RangeAnalysisLatticeNode::BOTTOM);
+        RangeAnalysisLatticeNode *rlt = new RangeAnalysisLatticeNode(BOTTOM);
         //rlt->val = new map<string, Range *>();
         return rlt;
     }

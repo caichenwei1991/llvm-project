@@ -18,6 +18,7 @@
 #include <climits>
 #include <map>
 #include <algorithm>
+#include <string>
 #include "llvm/Support/raw_ostream.h"
 
 using namespace llvm;
@@ -28,11 +29,11 @@ public:
 
     map<string, string> val;
 
-
     bool equalsTo(LatticeNode *other) {
 
         AEAnalysisLatticeNode * otherNode = static_cast<AEAnalysisLatticeNode*>(other);
         //if I am top or bottom:
+        
         if(this->basic != "") {
             return this->basic == otherNode->basic;
         }else{ 
@@ -60,50 +61,78 @@ public:
 
     LatticeNode * joinWith(LatticeNode *other) {
         AEAnalysisLatticeNode * otherNode = static_cast<AEAnalysisLatticeNode*>(other);
+        errs()<< ">>>>>>>>>> LatticeNode * joinWith start <<<<<<<<<<\n";
+        //errs()<< "otherNode size () = " << otherNode->val.size() << '\n';
+        //errs()<< "otherNode size () = " << otherNode->basic << '\n';
 
-        if (this->basic == BOTTOM && otherNode->basic == BOTTOM) { return new AEAnalysisLatticeNode(BOTTOM); }
-        
-        if (this->basic == TOP || otherNode->basic == TOP) { return new AEAnalysisLatticeNode(TOP); }
-        
-        if (this->basic == BOTTOM) { return new AEAnalysisLatticeNode(otherNode); }
-        else if (otherNode->basic == BOTTOM) { return new AEAnalysisLatticeNode(this); }
-        
-        //common situation
-        AEAnalysisLatticeNode *newNode = new AEAnalysisLatticeNode();
-        newNode->val = this->val;
-        
-        for(map<string, string>::iterator it = newNode->val.begin(); it != newNode->val.end(); it++) {
-            if(otherNode->val.find(it->first) == otherNode->val.end()) { 
-                //no same key found, merge(intersect) both nodes to empty!
-                //newNode->val[it->first] = it->second;
-                newNode->val.erase(it);
-            }else if(otherNode->val.find(it->first)->second == it->second) { //same key same value found
-                //newNode->val[it->first] = it->second;
-                errs() << " excuted line 54, AEAnalysisLatticeNode.cpp" <<'\n';
-            }else { //same key found, check contents
-                newNode->val.erase(it);
-            }
-            /*
-            if(otherNode->val.find(it->first)->second != it->second){ //if key is matching but contents
-                    newNode->val.erase(it);
-                    //return false; 
-            }
-            */
-            //if(otherNode->val.find(it->second)->second != it->second) { return false; }
+        if (this->basic == TOP || otherNode->basic == TOP) { 
+            "I just entered 4... \n";
+            return new AEAnalysisLatticeNode(TOP); 
         }
+
+        if (this->basic == BOTTOM && otherNode->basic == BOTTOM) { 
+            errs()<< "I just entered 1... \n"; 
+            return new AEAnalysisLatticeNode(BOTTOM); 
+        }
+        
+        AEAnalysisLatticeNode *newNode = new AEAnalysisLatticeNode();
+        if (this->basic == BOTTOM) { 
+            "I just entered 2... \n"; 
+            return new AEAnalysisLatticeNode(otherNode); 
+        }
+        if (otherNode->basic == BOTTOM) { 
+            "I just entered 3... \n";
+            return new AEAnalysisLatticeNode(this);
+        }
+        //common situation
+        
+        newNode->val = this->val;
+        errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
+
+
+    for (map<string, string>::iterator it = this->val.begin(); it != this->val.end(); it++) {
+
+        if (otherNode->val.find(it->first) == otherNode->val.end()) {
+            newNode->val[it->first] = this->val.find(it->first)->second;
+
+        } else {
+
+            string otherNodeVal = otherNode->val.find(it->first)->second;
+            string thisVal = this->val.find(it->first)->second;
+
+            if (otherNodeVal == thisVal)
+
+                newNode->val[it->first] = otherNodeVal;
+
+        }
+    }
+
+    for (map<string, string>::iterator it = otherNode->val.begin(); it != otherNode->val.end(); it++) {
+
+        if (this->val.find(it->first) == this->val.end()) {
+            newNode->val[it->first] = otherNode->val.find(it->first)->second;
+        } else {
+            string thisVal = this->val.find(it->first)->second;
+            string otherNodeVal = otherNode->val.find(it->first)->second;
+
+            if (otherNodeVal == thisVal)
+                newNode->val[it->first] = otherNodeVal;
+        }
+    }
+        errs()<< "Check newNode :>>" << newNode->val.size() << " \n";
         return newNode;
     }
 
-    AEAnalysisLatticeNode(){} // init
+    AEAnalysisLatticeNode():LatticeNode(){} // init
     AEAnalysisLatticeNode(string s):LatticeNode(s){}// initialize with TOP or BOTTOM
-    AEAnalysisLatticeNode(AEAnalysisLatticeNode *node){
-        errs()<<"AEAnalysisLatticeNode::AEAnalysisLatticeNode good!\n";
+    AEAnalysisLatticeNode(AEAnalysisLatticeNode *node):LatticeNode(AEAnalysisLatticeNode(node->basic)){
+        //errs()<<"00AEAnalysisLatticeNode::AEAnalysisLatticeNode good!!\n";
         this->basic = node->basic;
-        errs()<<node->val.size();
-        errs()<<"AEAnalysisLatticeNode::AEAnalysisLatticeNode good!!\n";
+        
         this->val = node->val;
-        errs()<<"AEAnalysisLatticeNode::AEAnalysisLatticeNode good!!!\n";
+        //errs()<< "this->val size: " << this->val.size() << '\n';
     }
+    
     ~AEAnalysisLatticeNode(){}
 
 
@@ -115,3 +144,24 @@ public:
 };
 
 #endif 
+
+
+        // for(map<string, string>::iterator it = newNode->val.begin(); it != newNode->val.end(); it++) {
+        //     if(otherNode->val.find(it->first) == otherNode->val.end()) { 
+        //         //no same key found, merge(intersect) both nodes to empty!
+        //         //newNode->val[it->first] = it->second;
+        //         newNode->val.erase(it);
+        //     }else if(otherNode->val.find(it->first)->second == it->second) { //same key same val found
+        //         //newNode->val[it->first] = it->second;
+        //         errs() << " excuted line 54, AEAnalysisLatticeNode.cpp" <<'\n';
+        //     }else { //same key found, check contents
+        //         newNode->val.erase(it);
+        //     }
+        //     /*
+        //     if(otherNode->val.find(it->first)->second != it->second){ //if key is matching but contents
+        //             newNode->val.erase(it);
+        //             //return false; 
+        //     }
+        //     */
+        //     //if(otherNode->val.find(it->second)->second != it->second) { return false; }
+        // }
