@@ -25,6 +25,25 @@ namespace {
     bool runOnFunction(Function &F){
         RangeAnalysis *RA = new RangeAnalysis(F);
         RA->runWorkList();
+
+        for(size_t i = 0; i < RA->CFGEdges.size(); i++){
+            CFGNode *src = RA->CFGEdges[i]->srcNode;
+            CFGNode *dst = RA->CFGEdges[i]->dstNode;
+            LatticeNode *ln = RA->CFGEdges[i]->latticeNode;
+            errs()<<"\n"<<i<<". "<<"FROM INSTRUCTION "<<*src->inst<<" TO "<<*dst->inst<<"\n";
+            
+            RangeAnalysisLatticeNode *paln = static_cast<RangeAnalysisLatticeNode *>(ln);
+            map<string, Range* >::iterator it = paln->val.begin();
+            for(;it!=paln->val.end();it++){
+                errs()<<it->first<<" -> ";
+                errs()<<it->second->toString();
+                errs()<<"\n";
+            }
+        
+        }
+
+
+
         return true;
     }
 

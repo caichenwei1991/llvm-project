@@ -13,6 +13,7 @@
 #include "LatticeNode.h"
 
 #include "ConstantPropAnalysisLatticeNode.h"
+#include "RangeAnalysisLatticeNode.h"
 #include <vector>
 #include <queue>
 #include <map>
@@ -100,7 +101,7 @@ public:
     
   }
   void runWorkList(){
-    //errs()<<"Running BasicAnalysis::runWorkList..."<<"\n";
+    errs()<<"Running BasicAnalysis::runWorkList..."<<"\n";
     queue<CFGNode *>workList;
     for(size_t i=0; i < CFGEdges.size(); i++){
         CFGEdges[i]->latticeNode = latticeNodeInit();
@@ -136,12 +137,13 @@ public:
         for(size_t i =0; i < curNode->outEdges.size(); i++){
             CFGEdge *e = curNode->outEdges[i];
             LatticeNode *newOut = out->joinWith(e->latticeNode);
-            e->latticeNode = newOut;
-            if(!out->equalsTo(newOut)){
-                delete e->latticeNode;
+
+            if(!newOut->equalsTo(e->latticeNode)){
+                //delete e->latticeNode;
                 e->latticeNode = newOut;
                 workList.push(e->dstNode);
             }
+
         }
         delete out;
     }

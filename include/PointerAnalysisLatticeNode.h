@@ -56,7 +56,7 @@ public:
         map<string, set<string> >::iterator it;
         for(it=otherNode->val.begin(); it!=otherNode->val.end();it++){
             if(newNode->val.find(it->first) != newNode->val.end()){
-                errs()<<"Found. Let's join(union) the pointee.\n";
+                //errs()<<"Found. Let's join(union) the pointee.\n";
                 set<string> otherSet = it->second;
                 set<string> newSet = newNode->val[it->first];
                 set<string>::iterator set_it = otherSet.begin();
@@ -65,7 +65,7 @@ public:
                 }
                 newNode->val[it->first] = newSet;
             }else{
-                errs()<<"Not found. just add it in the newnode.\n";
+                //errs()<<"Not found. just add it in the newnode.\n";
                 newNode->val[it->first] = it->second;
             }
         }

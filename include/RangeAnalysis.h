@@ -62,7 +62,7 @@ public:
     RangeAnalysisLatticeNode *checkLoop(RangeAnalysisLatticeNode *in, Instruction *inst){
         if(inst_state.count(inst)!=0){
             //this instruction has been met before
-            errs()<<"RangeAnalysisLatticeNode::checkLoop Inst met before.\n";
+            errs()<<"!!RangeAnalysisLatticeNode::checkLoop Inst met before.\n";
             RangeAnalysisLatticeNode *old = inst_state[inst];
             RangeAnalysisLatticeNode *out = new RangeAnalysisLatticeNode();
             out->val = in->val;
@@ -83,9 +83,9 @@ public:
             return out;
         }else{
             //first time to meet the inst
-            errs()<<"RangeAnalysisLatticeNode::checkLoop Inst first time meet.";
+            errs()<<"!!RangeAnalysisLatticeNode::checkLoop Inst first time meet.\n";
             inst_state[inst] = new RangeAnalysisLatticeNode(in);
-            errs()<<"RangeAnalysisLatticeNode::checkLoop Inst first time meet.!";
+            errs()<<"RangeAnalysisLatticeNode::checkLoop Inst first time meet.!\n";
             return in;
         }
     }
