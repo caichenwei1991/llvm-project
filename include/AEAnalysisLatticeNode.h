@@ -60,9 +60,9 @@ public:
 
     LatticeNode * joinWith(LatticeNode *other) {
         AEAnalysisLatticeNode * otherNode = static_cast<AEAnalysisLatticeNode*>(other);
-        //errs()<< ">>>>>>>>>> LatticeNode * joinWith start <<<<<<<<<<\n";
-        //errs()<< "otherNode size () = " << otherNode->val.size() << '\n';
-        //errs()<< "otherNode size () = " << otherNode->basic << '\n';
+        ////errs()<< ">>>>>>>>>> LatticeNode * joinWith start <<<<<<<<<<\n";
+        ////errs()<< "otherNode size () = " << otherNode->val.size() << '\n';
+        ////errs()<< "otherNode size () = " << otherNode->basic << '\n';
 
         if (this->basic == TOP || otherNode->basic == TOP) { 
             return new AEAnalysisLatticeNode(TOP); 
@@ -82,7 +82,7 @@ public:
         //common situation
         
         newNode->val = this->val;
-        //errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
+        ////errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
 
     for (map<string, string>::iterator it = this->val.begin(); it != this->val.end(); it++) {
 
@@ -114,18 +114,18 @@ public:
         }
     }
 
-        //errs()<< "Check newNode :>>" << newNode->val.size() << " \n";
+        ////errs()<< "Check newNode :>>" << newNode->val.size() << " \n";
         return newNode;
     }
 
     AEAnalysisLatticeNode():LatticeNode(){} // init
     AEAnalysisLatticeNode(string s):LatticeNode(s){}// initialize with TOP or BOTTOM
     AEAnalysisLatticeNode(AEAnalysisLatticeNode *node):LatticeNode(AEAnalysisLatticeNode(node->basic)){
-        //errs()<<"00AEAnalysisLatticeNode::AEAnalysisLatticeNode good!!\n";
+        ////errs()<<"00AEAnalysisLatticeNode::AEAnalysisLatticeNode good!!\n";
         this->basic = node->basic;
         
         this->val = node->val;
-        //errs()<< "this->val size: " << this->val.size() << '\n';
+        ////errs()<< "this->val size: " << this->val.size() << '\n';
     }
     
     ~AEAnalysisLatticeNode(){}

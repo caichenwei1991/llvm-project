@@ -23,21 +23,21 @@ public:
     }
 
     PointerAnalysisLatticeNode(PointerAnalysisLatticeNode *node):LatticeNode(node->basic){
-        //errs()<<"PointerAnalysisLatticeNode::PointerAnalysisLatticeNode() good!\n";
+        ////errs()<<"PointerAnalysisLatticeNode::PointerAnalysisLatticeNode() good!\n";
         this->basic = node->basic;
-        //errs()<<node->val.size();
-        //errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!!\n";
+        ////errs()<<node->val.size();
+        ////errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!!\n";
         this->val = node->val;
-        //errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!!!\n";
+        ////errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!!!\n";
     }
     //RangeAnalysisLatticeNode(string s):LatticeNode(s){}//for top and bottom
 
     LatticeNode *joinWith(LatticeNode *other){
-        //errs()<<"PointerAnalysis:: join with called!\n";
+        ////errs()<<"PointerAnalysis:: join with called!\n";
         PointerAnalysisLatticeNode *otherNode = static_cast<PointerAnalysisLatticeNode *>(other);
         //if one of the two nodes is a bottom:
         if(this->basic == BOTTOM || otherNode->basic == BOTTOM){
-            //errs()<<"joinWith: One of the latticenode is bottom\n";
+            ////errs()<<"joinWith: One of the latticenode is bottom\n";
             if(this->basic==BOTTOM){
                 return new PointerAnalysisLatticeNode(otherNode);
             }else{
@@ -56,7 +56,7 @@ public:
         map<string, set<string> >::iterator it;
         for(it=otherNode->val.begin(); it!=otherNode->val.end();it++){
             if(newNode->val.find(it->first) != newNode->val.end()){
-                //errs()<<"Found. Let's join(union) the pointee.\n";
+                ////errs()<<"Found. Let's join(union) the pointee.\n";
                 set<string> otherSet = it->second;
                 set<string> newSet = newNode->val[it->first];
                 set<string>::iterator set_it = otherSet.begin();
@@ -65,7 +65,7 @@ public:
                 }
                 newNode->val[it->first] = newSet;
             }else{
-                //errs()<<"Not found. just add it in the newnode.\n";
+                ////errs()<<"Not found. just add it in the newnode.\n";
                 newNode->val[it->first] = it->second;
             }
         }
@@ -74,7 +74,7 @@ public:
     }
 
     bool equalsTo(LatticeNode *other){
-        //errs()<<"RangeAnalysis:: equals to called!\n";
+        ////errs()<<"RangeAnalysis:: equals to called!\n";
         PointerAnalysisLatticeNode *otherNode = static_cast<PointerAnalysisLatticeNode*>(other);
         //if I am top or bottom:
         if(this->basic != ""){
@@ -100,11 +100,11 @@ public:
                     }
                 }
             }else{
-                errs()<<"PointerAnalysis:: equals to called! VALUE is False2!!!!!!!!!!!11\n";
+                //errs()<<"PointerAnalysis:: equals to called! VALUE is False2!!!!!!!!!!!11\n";
                 return false;
             }
         }
-        errs()<<"PointerAnalysis:: equals to called! VALUE is TRUE!!!!!!!!!!!11\n";
+        //errs()<<"PointerAnalysis:: equals to called! VALUE is TRUE!!!!!!!!!!!11\n";
         return true;
     }
 

@@ -49,21 +49,21 @@ public:
     }
 
     RangeAnalysisLatticeNode(RangeAnalysisLatticeNode *node):LatticeNode(node->basic){
-        errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!\n";
+        //errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!\n";
         this->basic = node->basic;
-        //errs()<<node->val.size();
-        //errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!!\n";
+        ////errs()<<node->val.size();
+        ////errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!!\n";
         this->val = node->val;
-        errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!!!\n";
+        //errs()<<"RangeAnalysisLatticeNode::RangeAnalysisLatticeNode good!!!\n";
     }
     //RangeAnalysisLatticeNode(string s):LatticeNode(s){}//for top and bottom
 
     LatticeNode *joinWith(LatticeNode *other){
-        errs()<<"RangeAnalysis:: join with called!\n";
+        //errs()<<"RangeAnalysis:: join with called!\n";
         RangeAnalysisLatticeNode *otherNode = static_cast<RangeAnalysisLatticeNode *>(other);
         //if one of the two nodes is a bottom:
         if(this->basic == BOTTOM || otherNode->basic == BOTTOM){
-            errs()<<"joinWith: One of the latticenode is bottpm\n";
+            //errs()<<"joinWith: One of the latticenode is bottpm\n";
             if(this->basic==BOTTOM){
                 return new RangeAnalysisLatticeNode(otherNode);
             }else{
@@ -97,7 +97,7 @@ public:
     }
 
     bool equalsTo(LatticeNode *other){
-        //errs()<<"RangeAnalysis:: equals to called!\n";
+        ////errs()<<"RangeAnalysis:: equals to called!\n";
         RangeAnalysisLatticeNode *otherNode = static_cast<RangeAnalysisLatticeNode*>(other);
         //if I am top or bottom:
         if(this->basic != ""){
@@ -113,15 +113,15 @@ public:
                 Range *otherRange = otherNode->val[it->first];
                 Range *myRange = it->second;
                 if(!myRange->equalsTo(otherRange)){
-                    errs()<<"RangeAnalysis:: equals to called! VALUE is False1!!!!!!!!!!!11\n";
+                    //errs()<<"RangeAnalysis:: equals to called! VALUE is False1!!!!!!!!!!!11\n";
                     return false;
                 }
             }else{
-                errs()<<"RangeAnalysis:: equals to called! VALUE is False2!!!!!!!!!!!11\n";
+                //errs()<<"RangeAnalysis:: equals to called! VALUE is False2!!!!!!!!!!!11\n";
                 return false;
             }
         }
-        errs()<<"RangeAnalysis:: equals to called! VALUE is TRUE!!!!!!!!!!!11\n";
+        //errs()<<"RangeAnalysis:: equals to called! VALUE is TRUE!!!!!!!!!!!11\n";
         return true;
     }
 

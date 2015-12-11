@@ -26,13 +26,13 @@ public:
 
   BasicAnalysis() {}
   BasicAnalysis(Function &F) {
-    errs()<<"Basic Analysis start.\n";
+    //errs()<<"Basic Analysis start.\n";
     createCFG(F);
   }
   void createCFG(Function &F){
     //adopt BFS to build the CFG
-    //errs()<<"1234";
-    errs()<<"BasicAnalysis::createCFG Creating CFG..."<<"\n";
+    ////errs()<<"1234";
+    //errs()<<"BasicAnalysis::createCFG Creating CFG..."<<"\n";
     
     int idx = 0;
     map<Instruction *, CFGNode *> inst_node;
@@ -85,7 +85,7 @@ public:
     for(;it!=inst_node.end(); it++){
       this->CFGNodes.push_back(it->second);
     }
-    //errs()<<"Size of all nodes:"<<CFGNodes.size()<<"\n";
+    ////errs()<<"Size of all nodes:"<<CFGNodes.size()<<"\n";
 
 
     //test the createCFG:
@@ -93,29 +93,29 @@ public:
     /*
     for(size_t i=0; i<this->CFGEdges.size(); i++){
       CFGEdge *e = this->CFGEdges[i];
-      errs()<<e->srcNode->idx<<" "<<e->dstNode->idx<<"\n";
+      //errs()<<e->srcNode->idx<<" "<<e->dstNode->idx<<"\n";
     }
 
-     errs()<<"head is "<<this->CFGHead->idx;*/
-     errs()<<"CFGcreate done!\n";
+     //errs()<<"head is "<<this->CFGHead->idx;*/
+     //errs()<<"CFGcreate done!\n";
     
   }
   void runWorkList(){
-    errs()<<"Running BasicAnalysis::runWorkList..."<<"\n";
+    //errs()<<"Running BasicAnalysis::runWorkList..."<<"\n";
     queue<CFGNode *>workList;
     for(size_t i=0; i < CFGEdges.size(); i++){
         CFGEdges[i]->latticeNode = latticeNodeInit();
     }
     for(size_t i=0; i < CFGNodes.size(); i++){
         workList.push(CFGNodes[i]);
-        //errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
+        ////errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
     }
-    //errs()<<"runWorkList::good!";
-    //errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
+    ////errs()<<"runWorkList::good!";
+    ////errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
     //run the worklist algorithm
     //int  aa = 0;
     while(!workList.empty()){
-        //errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
+        ////errs()<<"runWorkList::good!!"<<workList.size()<<"\n";
         CFGNode *curNode = workList.front();
         workList.pop();
         //join all the latticeNodes on curNode's inEdges.
@@ -131,8 +131,8 @@ public:
         LatticeNode *out = runFlowFunc(in, curNode);
 
 	//ConstantPropAnalysisLatticeNode *newout = static_cast<ConstantPropAnalysisLatticeNode*>(out);
-	//errs() << "add" << " : " << newout->value["add"] << "\n";
-	//errs() << "sub" << " : " << newout->value["sub"] << "\n";
+	////errs() << "add" << " : " << newout->value["add"] << "\n";
+	////errs() << "sub" << " : " << newout->value["sub"] << "\n";
         //check the out changed or not
         for(size_t i =0; i < curNode->outEdges.size(); i++){
             CFGEdge *e = curNode->outEdges[i];
@@ -147,8 +147,8 @@ public:
         }
         delete out;
     }
-    errs()<<"Size of nodes:"<<this->CFGNodes.size()<<"\n";
-    errs()<<"Worklist Done!\n";
+    //errs()<<"Size of nodes:"<<this->CFGNodes.size()<<"\n";
+    //errs()<<"Worklist Done!\n";
 };
   virtual LatticeNode *runFlowFunc(LatticeNode *in, CFGNode *curNode){}
   virtual LatticeNode *latticeNodeInit(){
