@@ -18,27 +18,21 @@ namespace {
 		static char ID;
 		vector<ConstantPropAnalysis *> cpa;
 		ConstantPropPass() : FunctionPass(ID) {}
-		//ConstantPropPass() : ModulePass(ID) {}
 		virtual bool runOnFunction(Function &F) {
-		//virtual bool runOnModule(Module &M) {
-			//for (Module::iterator func = M.begin(); func != M.end(); func++) {
 			cpa.push_back(new ConstantPropAnalysis(F));
-			//for (unsigned int i = 0; i < cpa.size(); i++)
 			cpa[cpa.size()-1]->runWorkList();
-				//errs() << cpa.size() << "\n";
-			//for (unsigned int i = 0; i < cpa.size(); i++) {
-			errs() << "Run on Function "<< F.getName() << "\n";
-				for (unsigned int j = 0; j < cpa[cpa.size()-1]->CFGEdges.size(); j++) {
-					ConstantPropAnalysisLatticeNode *tmp = static_cast<ConstantPropAnalysisLatticeNode*>(cpa[cpa.size()-1]->CFGEdges[j]->latticeNode);
-					errs() << "Output of Node #" << j << "\n";
-					for (map<string, double>::iterator it = tmp->value.begin(); it != tmp->value.end(); it++) {
-						errs() << it->first << " = " << it->second << "\n";
-					}
-					errs() << "\n";
+			errs() << "\n==== The analysis result of function "<< F.getName()<<" (START) ====" << "\n";
+			for (unsigned int j = 0; j < cpa[cpa.size()-1]->CFGEdges.size(); j++) {
+				CFGNode *src = cpa[cpa.size()-1]->CFGEdges[j]->srcNode;
+				CFGNode *dst = cpa[cpa.size()-1]->CFGEdges[j]->dstNode;
+				ConstantPropAnalysisLatticeNode *tmp = static_cast<ConstantPropAnalysisLatticeNode*>(cpa[cpa.size()-1]->CFGEdges[j]->latticeNode);
+				errs()<<"\n"<<j<<". "<<"FROM INSTRUCTION "<<*src->inst<<" TO "<<*dst->inst<<"\n";
+				for (map<string, double>::iterator it = tmp->value.begin(); it != tmp->value.end(); it++) {
+					errs() << it->first << " = " << it->second << "\n";
 				}
-			//}
-			errs() << "Done!" << "\n";
-		//}
+				errs() << "\n";
+			}
+			errs() << "\n==== The analysis result of function "<< F.getName()<<" (END) ====" << "\n";
 			return false;
 		}
 /*

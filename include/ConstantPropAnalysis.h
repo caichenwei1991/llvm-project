@@ -51,7 +51,7 @@ public:
 			break;
 		//case 26:
 		//case 27:
-		/*
+	/*	
 		case 33	:
 		case 34	:
 		case 35	:
@@ -66,9 +66,10 @@ public:
 		case 44	:
 			out = executeCastOp(newIn, inst);
 			break;
-		*/
+	*/	
 		case 47	: //Phi
 			out = executePhiOp(newIn, inst);
+			break;
 			
 		default: 
 			out = new ConstantPropAnalysisLatticeNode();
@@ -130,10 +131,10 @@ public:
 				value[k->getName()] = result;
 				ff->value = value;
 				ConstantPropAnalysisLatticeNode *t = static_cast<ConstantPropAnalysisLatticeNode*>(ff->joinWith(f));
-				for (map<string, double>::iterator it = ff->value.begin(); it != ff->value.end(); it++){
-					errs() << it->first << " : " << it->second << "\n";
-				}
-				errs() << "ok!\n";
+				//for (map<string, double>::iterator it = ff->value.begin(); it != ff->value.end(); it++){
+				//	errs() << it->first << " : " << it->second << "\n";
+				//}
+				//errs() << "ok!\n";
 				return t;
 			} else {
 				if (f->value.find(right->getName()) != f->value.end()) {
@@ -242,16 +243,17 @@ public:
         	Value *result = inst;
 		CastInst *castInst = dyn_cast<CastInst>(inst);
 		Value* casting = inst->getOperand(0);
+
 		if (!dyn_cast<Constant>(result)) {
 	                if (!dyn_cast<Constant>(casting)) {
                         	if (f->value.find(casting->getName()) != f->value.end()) {
-                                float forwardVal = f->value.find(casting->getName())->second;
+                                double forwardVal = f->value.find(casting->getName())->second;
                                 ConstantPropAnalysisLatticeNode* ff = new ConstantPropAnalysisLatticeNode();
                                 Type* ttype = castInst->getDestTy();
                                 if (ttype->isDoubleTy())
-                                        forwardVal = (float) forwardVal;
+                                        forwardVal = (double) forwardVal;
                                 else if(ttype->isFloatingPointTy())
-                                        forwardVal = (float) forwardVal;
+                                        forwardVal = (double) forwardVal;
                                 else if (ttype->isIntegerTy())
                                         forwardVal = (int) forwardVal;
 				value[result->getName()] = forwardVal;
@@ -263,16 +265,16 @@ public:
                                 }
 			} else {
 				if (ConstantFP *cfp = dyn_cast<ConstantFP>(casting)) {
-                                float forwardVal = cfp->getValueAPF().convertToFloat();
-                                ConstantPropAnalysisLatticeNode* ff = new ConstantPropAnalysisLatticeNode();
-                                value[result->getName()] = forwardVal;
-                                ff->value = value;
-                                ConstantPropAnalysisLatticeNode* tmp = static_cast<ConstantPropAnalysisLatticeNode*>(ff->joinWith(f));
-                                delete ff;
-                                delete f;
-                                f = tmp;
-                        	} else if (ConstantInt *cfp = dyn_cast<ConstantInt>(casting)) {
-                                float forwardVal = cfp->getZExtValue();
+                                //double forwardVal = cfp->getValueAPF().convertToDouble();
+                                //ConstantPropAnalysisLatticeNode* ff = new ConstantPropAnalysisLatticeNode();
+                                //value[result->getName()] = forwardVal;
+                                //ff->value = value;
+                                //ConstantPropAnalysisLatticeNode* tmp = static_cast<ConstantPropAnalysisLatticeNode*>(ff->joinWith(f));
+                                //delete ff;
+                                //delete f;
+                                //f = tmp;
+                        	}}} else if (ConstantInt *cfp = dyn_cast<ConstantInt>(casting)) {
+                                double forwardVal = cfp->getZExtValue();
                                 ConstantPropAnalysisLatticeNode* ff = new ConstantPropAnalysisLatticeNode();
                                 value[result->getName()] = forwardVal;
                                 ff->value = value;
