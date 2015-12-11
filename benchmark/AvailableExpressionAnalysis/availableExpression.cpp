@@ -17,5 +17,5 @@ int main() {
   z = x + 1;
   t = a + b;
 
-  return t;
+  return 0;
 }

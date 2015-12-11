@@ -82,7 +82,7 @@ public:
         //common situation
         
         newNode->val = this->val;
-        errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
+        //errs()<< "size of newNode-val :>>" << newNode->val.size() << " \n";
 
     for (map<string, string>::iterator it = this->val.begin(); it != this->val.end(); it++) {
 
@@ -114,7 +114,7 @@ public:
         }
     }
 
-        errs()<< "Check newNode :>>" << newNode->val.size() << " \n";
+        //errs()<< "Check newNode :>>" << newNode->val.size() << " \n";
         return newNode;
     }
 

@@ -12,13 +12,13 @@ class AEAnalysis: public BasicAnalysis{
 
 public:
 
-    AEAnalysis(Function &F):BasicAnalysis(F){
+    AEAnalysis(Function &F):BasicAnalysis(){
         createCFG(F);
     };
 
 
     LatticeNode *runFlowFunc(LatticeNode *in, CFGNode *currentNode){
-        errs()<<"\n>\n";
+        //errs()<<"\n>\n";
         AEAnalysisLatticeNode *inputIn = static_cast<AEAnalysisLatticeNode *>(in);
         AEAnalysisLatticeNode *returnIn;
 
@@ -69,7 +69,7 @@ private:
         string rightOperandStr = string(rightOperandValue->getName());
         string currentInstName = currentInst->getName(); //get inst name e.g. %add
 
-        errs()<< "OperatorName >> : " << opName << "\nInstructionName >> : %" << currentInstName <<'\n';
+        //errs()<< "OperatorName >> : " << opName << "\nInstructionName >> : %" << currentInstName <<'\n';
         //currentInstName = "%" + currentInstName;
         //errs() << "This instruction is: " << opName << " This node is: " << currentInstName << " = " << leftOperandStr << " " << opName << " " << rightOperandStr << "\n";
 
@@ -91,7 +91,7 @@ private:
 
                     newIn->val[currentInstName] = str;
 
-                    errs() << "Type >> : Both operands are constant >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
+                    //errs() << "Type >> : Both operands are constant >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
 
                     for (map<string, string>::iterator it = newIn->val.begin(); it != newIn->val.end(); it++) {
 
@@ -108,7 +108,7 @@ private:
 
                     if (currentInstName != leftOperandStr && rightOperandStr != "") {
                         newIn->val[currentInstName] = opName + "," + leftValStr + "," + rightOperandStr;
-                        errs() << "Type >> : Left operand - Constant & Right operand - varible >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
+                        //errs() << "Type >> : Left operand - Constant & Right operand - varible >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
                     }
 
             }
@@ -121,7 +121,7 @@ private:
 
                     if (currentInstName != leftOperandStr && leftOperandStr != "" ) {
                         newIn->val[currentInstName] = opName + ","  + leftOperandStr + "," + rightValStr;
-                        errs() << "Type >> : Left operand - varible & Right operand - operand >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
+                        //errs() << "Type >> : Left operand - varible & Right operand - operand >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
                     }
 
 
@@ -131,7 +131,7 @@ private:
                     for (map<string, string>::iterator it = newIn->val.begin(); it != newIn->val.end(); it++) {
                         if (currentInstName == it->first) {
                             newIn->val[currentInstName] = opName + "," + leftOperandStr + "," + rightOperandStr ;
-                            errs() << "Type >> : Both operands are varible >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
+                            //errs() << "Type >> : Both operands are varible >> : " << currentInstName << " = " << newIn->val[currentInstName] << '\n';
                         } else {
 
                         }
@@ -141,7 +141,7 @@ private:
                     
                 
         }
-        errs() << "Finishing analyzeAOpB >> newIn node size >> : " << newIn->val.size() << '\n';
+        //errs() << "Finishing analyzeAOpB >> newIn node size >> : " << newIn->val.size() << '\n';
         return newIn;
     }
 
