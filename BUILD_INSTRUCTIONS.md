@@ -20,16 +20,17 @@ $ source pointer.sh
 $ cd $CSE231ROOT
 $ make llvm
 # Constant propagation pass:
-$ opt -load $LLVMLIB/pass.so -ConstantProp < $BENCHMARKS 
+$ opt -load $LLVMLIB/pass.so -ConstantProp < testcp_m2r.bc  
+$ opt -load $LLVMLIB/pass.so -ConstantProp < testcpphi2_m2r.bc  
 
 # Available expression pass:
-$ opt -load $LLVMLIB/pass.so -aeAnalysis < $BENCHMARKS 
+$ opt -load $LLVMLIB/pass.so -aeAnalysis < availableExpression.mem2reg.bc
 
 # Range anlaysis pass:
-$ opt -load $LLVMLIB/pass.so -rangeAnalysis < $BENCHMARKS 
+$ opt -load $LLVMLIB/pass.so -rangeAnalysis < range.mem2reg.bc
 
 # Pointer analysis pass:
-$ opt -load $LLVMLIB/pass.so -pointerAnalysis < $BENCHMARKS 
+$ opt -load $LLVMLIB/pass.so -pointerAnalysis < pointer.mem2reg.bc 
 
-# Passes are located under:
+# Passes cpp files are located under:
 /src/pass/
